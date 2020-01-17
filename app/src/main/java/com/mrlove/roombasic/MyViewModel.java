@@ -4,22 +4,39 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.SavedStateHandle;
+import androidx.lifecycle.LiveData;
+
+import com.mrlove.roombasic.domain.Word;
+
+import java.util.List;
 
 public class MyViewModel extends AndroidViewModel {
-    private SavedStateHandle handle;
-    private final static String KEY_DATA = "data";
-    public MyViewModel(@NonNull Application application, SavedStateHandle handle) {
+    private WordRepository wordRepository;
+
+    public MyViewModel(@NonNull Application application) {
         super(application);
-        this.handle = handle;
+        wordRepository = new WordRepository(application);  //初始化得到wordRepository工具类
     }
 
-    public MutableLiveData<Integer> getNumber(){
-        if(!handle.contains(KEY_DATA)){
-            handle.set(KEY_DATA,0);
-        }
-        return handle.getLiveData(KEY_DATA);
+    LiveData<List<Word>> getAllWordsLive() {
+        return wordRepository.getAllWordslive();
     }
+
+    void insertWords(Word... words) {
+        wordRepository.insertWords(words);
+    }
+
+    void updateWords(Word... words) {
+        wordRepository.updateWords(words);
+    }
+
+    void deleteWords(Word... words) {
+        wordRepository.deleteWords(words);
+    }
+
+    void clearWords() {
+        wordRepository.clearWords();
+    }
+
 
 }

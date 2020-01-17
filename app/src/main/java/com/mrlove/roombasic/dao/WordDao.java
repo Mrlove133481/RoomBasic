@@ -1,5 +1,6 @@
 package com.mrlove.roombasic.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -21,9 +22,9 @@ public interface WordDao {
     @Delete
     void  deleteWords(Word... words);
 
-    @Query("DELETE FROM WORD")  //查询语句写的清空所有数据
+    @Query("DELETE FROM WORD")   //查询语句写的清空所有数据
     void deleteAllWords();
 
     @Query("SELECT * FROM Word ORDER BY id DESC")
-    List<Word> getAllWords();
+    LiveData<List<Word>> getAllWords();  //设置数据为可观察类型LiveData
 }

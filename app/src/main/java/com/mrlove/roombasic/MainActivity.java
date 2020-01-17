@@ -2,6 +2,7 @@ package com.mrlove.roombasic;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
@@ -20,35 +21,39 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
      MyViewModel myViewModel;
      ActivityMainBinding binding;
-     WordDao wordDao;
-     WordDataBase wordDataBase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         myViewModel = new ViewModelProvider(this,new SavedStateViewModelFactory(getApplication(),this)).get(MyViewModel.class);
         binding.setData(myViewModel);
-        wordDataBase = Room.databaseBuilder(this,WordDataBase.class,"word_database")
-                .allowMainThreadQueries()
-                .build();
-        wordDao = wordDataBase.getWordDao();
-        updateView();
+        myViewModel.getAllWordsLive().observe(this, new Observer<List<Word>>() {
+            @Override
+            public void onChanged(List<Word> words) {
+                String str = "";
+                for (Word word: words
+                ) {
+                    str += word.getId()+":"+word.getWord()+"="+word.getChineseMeaning()+"\n";
+                }
+                binding.textView2.setText(str);
+            }
+        });
         //添加
         binding.buttoninsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Word word1 = new Word("hello","你好");
                 Word word2 = new Word("world","世界");
-                wordDao.insertWords(word1,word2);
-                updateView();
+                myViewModel.insertWords(word1,word2);
+
             }
         });
         //删除所有
         binding.buttonclear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                wordDao.deleteAllWords();
-                updateView();
+                myViewModel.clearWords();
+
             }
         });
         //更新
@@ -56,9 +61,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Word word = new Word("haha","哈哈");
-                word.setId(35);
-                wordDao.updateWords(word);
-                updateView();
+                word.setId(40);
+                myViewModel.updateWords(word);
             }
         });
         //删除某一项
@@ -66,23 +70,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Word word = new Word("haha","哈哈");
-                word.setId(35);
-                wordDao.deleteWords(word);
-                updateView();
+                word.setId(40);
+                myViewModel.deleteWords(word);
             }
         });
 
 
     }
-
-    void updateView(){
-        List<Word> list = wordDao.getAllWords();
-        String str = "";
-        for (Word word: list
-             ) {
-            str += word.getId()+":"+word.getWord()+"="+word.getChineseMeaning()+"\n";
-        }
-        binding.textView2.setText(str);
-    }
-
 }
