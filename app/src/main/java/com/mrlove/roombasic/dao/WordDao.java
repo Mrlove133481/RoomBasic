@@ -8,6 +8,8 @@ import androidx.room.Update;
 
 import com.mrlove.roombasic.domain.Word;
 
+import java.util.List;
+
 @Dao   //Database access object
 public interface WordDao {
     @Insert
@@ -23,5 +25,5 @@ public interface WordDao {
     void deleteAllWords();
 
     @Query("SELECT * FROM Word ORDER BY id DESC")
-    void getAllWords();
+    List<Word> getAllWords();
 }
