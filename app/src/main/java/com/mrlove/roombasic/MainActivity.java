@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Word word1 = new Word("hello","你好");
                 Word word2 = new Word("world","世界");
-                wordDao.updateWords(word1,word2);
+                wordDao.insertWords(word1,word2);
                 Log.d(LAG,"aaa");
                 updateView();
             }
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             str += word.getId()+":"+word.getWord()+"="+word.getChineseMeaning()+"\n";
         }
         Log.d(LAG,str);
-       // binding.textView2.setText(str);
+        binding.textView2.setText(str);
     }
 
 }
