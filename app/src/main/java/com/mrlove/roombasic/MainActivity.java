@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         wordDao = wordDataBase.getWordDao();
         updateView();
-
+        //添加
         binding.buttoninsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,6 +43,36 @@ public class MainActivity extends AppCompatActivity {
                 updateView();
             }
         });
+        //删除所有
+        binding.buttonclear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                wordDao.deleteAllWords();
+                updateView();
+            }
+        });
+        //更新
+        binding.buttonupdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Word word = new Word("haha","哈哈");
+                word.setId(35);
+                wordDao.updateWords(word);
+                updateView();
+            }
+        });
+        //删除某一项
+        binding.buttondelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Word word = new Word("haha","哈哈");
+                word.setId(35);
+                wordDao.deleteWords(word);
+                updateView();
+            }
+        });
+
+
     }
 
     void updateView(){
