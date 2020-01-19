@@ -12,7 +12,7 @@ import com.mrlove.roombasic.domain.Word;
 @Database(entities = {Word.class}, version = 1) //exportSchema 默认为true，存储展示数据库的结构信息
 public abstract class WordDataBase extends RoomDatabase {
     //singleton
-    private static WordDataBase wordDataBase;  //单例模式，保证获取的数据库连接是唯一的
+    private static WordDataBase wordDataBase;  //单例模式，保证获取的数据库实例是唯一的
 
     public static synchronized WordDataBase getWordDataBase(Context context) {
         if (wordDataBase == null) {
