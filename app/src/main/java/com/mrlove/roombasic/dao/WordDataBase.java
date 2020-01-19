@@ -17,10 +17,15 @@ public abstract class WordDataBase extends RoomDatabase {
     public static synchronized WordDataBase getWordDataBase(Context context) {
         if (wordDataBase == null) {
             wordDataBase = Room.databaseBuilder(context.getApplicationContext(), WordDataBase.class, "word_database")
+                    //下面注释表示允许主线程进行数据库操作，但是不推荐这样做。
+                    //他可能造成主线程lock以及anr
+                    //所以我们的操作都是在新线程完成的
+                    // .allowMainThreadQueries()
                     .build();
         }
         return wordDataBase;
     }
-
+    //RoomDatabase提供直接访问底层数据库实现，我们通过定义抽象方法返回具体Dao
+    //然后进行数据库增删该查的实现。
     public abstract WordDao getWordDao();
 }
